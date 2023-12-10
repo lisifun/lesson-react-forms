@@ -1,43 +1,32 @@
 // src/components/MovieList.jsx
 
-import { useState } from "react";
-import moviesDataJSON from "../movies-data.json";
 import MovieCard from "./MovieCard";
-import AddMovie from "./AddMovie";
-import FilterMovies from "./FilterMovies";
+
+import { useState } from "react";
+
+// import the array of movie objects
+import moviesData from "../movies-data.json";
 
 function MovieList() {
-  const [movies, setMovies] = useState(moviesDataJSON);
-  const [moviesData, setMoviesData] = useState(moviesDataJSON);
+  // Declare a state variable "movies"
+  // and set the array from movies-data.json as the initial state
+  const [movies, setMovies] = useState(moviesData);
 
-  const addNewMovie = (newMovie) => {
-    const updatedMovies = [...movies, newMovie];
-    const updatedMoviesData = [...moviesData, newMovie];
-
-    setMovies(updatedMovies);
-    setMoviesData(updatedMoviesData);
-  };
-
-  const filterMovieList = (str) => {
-    let filteredMovies;
-
-    if (str === "All") {
-      filteredMovies = moviesData;
-    } else {
-      filteredMovies = moviesData.filter((movie) => {
-        return movie.title[0].toLowerCase() === str.toLowerCase();
-      });
-    }
+  const deleteMovie = (movieId) => {
+    const filteredMovies = movies.filter((movie) => {
+      return movie._id !== movieId;
+    });
 
     setMovies(filteredMovies);
   };
 
   return (
     <div>
-      <FilterMovies filterMovies={filterMovieList} />
-      <AddMovie addMovie={addNewMovie} />
+      <h2>Movie List</h2>
       {movies.map((movie) => {
-        return <MovieCard key={movie._id} movie={movie} />;
+        return (
+          <MovieCard key={movie._id} movie={movie} deleteMovie={deleteMovie} />
+        );
       })}
     </div>
   );
